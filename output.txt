@@ -1,0 +1,165 @@
+PRE SQUIRREL PARAMETERS
+{
+    "show_plan_selection_screen": true,
+    "show_app_confirmation_screens": [
+        "com.clover.whatever.wirelessManager.areYouSure"
+    ],
+    "available_plans": [
+        "R9HQKT7HRB3Y2",
+        "WRVQCQGGWJ9QE",
+        "7M6XAHBW29Q94",
+        "TV771VD339C1C"
+    ],
+    "billable_devices": [
+        "C010UQ72930043",
+        "C030UQ71050253"
+    ],
+    "installed_apps": [
+        "JBCS0CPRQW9WM",
+        "X1QY38CCAQY8E",
+        "2GYRXXRZDQFNT"
+    ],
+    "country": "US",
+    "reseller": "TY4PVSPS6YBW2"
+}
+
+INPUT WITH TAGS
+{
+    "plans": [
+        {
+            "thing": "R9HQKT7HRB3Y2",
+            "tags": [
+                "station_pro_friendly"
+            ]
+        },
+        {
+            "thing": "WRVQCQGGWJ9QE",
+            "tags": [
+                
+            ]
+        },
+        {
+            "thing": "7M6XAHBW29Q94",
+            "tags": [
+                
+            ]
+        },
+        {
+            "thing": "TV771VD339C1C",
+            "tags": [
+                "station_pro_friendly"
+            ]
+        }
+    ],
+    "devices": [
+        {
+            "thing": "C010UQ72930043",
+            "tags": [
+                
+            ]
+        },
+        {
+            "thing": "C030UQ71050253",
+            "tags": [
+                "station_pro"
+            ]
+        }
+    ],
+    "apps": [
+        {
+            "thing": "JBCS0CPRQW9WM",
+            "tags": [
+                "wireless_manager"
+            ]
+        },
+        {
+            "thing": "X1QY38CCAQY8E",
+            "tags": [
+                
+            ]
+        },
+        {
+            "thing": "2GYRXXRZDQFNT",
+            "tags": [
+                
+            ]
+        }
+    ],
+    "reseller": {
+        "thing": "TY4PVSPS6YBW2",
+        "tags": [
+            "upsell_pitch"
+        ]
+    },
+    "country": {
+        "thing": "US",
+        "tags": [
+            
+        ]
+    }
+}
+
+RUN PLAN:
+
+    def anyDevicesTagged(tag){
+        return devices.any{ it.tags.any { it == tag } }
+    }
+
+    def anyAppsTagged(tag){
+        return apps.any{ it.tags.any { it == tag } }
+    }
+
+    def restrictPlans(tag){
+        newPlans = []
+        plans.each{
+            if (it.tags.contains(tag)) {
+                newPlans.add(it)
+            }
+        }
+        plans = newPlans
+    }
+
+
+    if ( anyDevicesTagged('station') ) {
+        restrictPlans('station_friendly')
+    }
+
+
+    if ( anyDevicesTagged('station_pro') ) {
+        restrictPlans('station_pro_friendly')
+    }
+
+
+    if ( reseller.tags.contains('upsell_pitch') ) {
+        showPlanSelectionScreen = false
+    }
+
+
+    if ( anyAppsTagged('wireless_manager') && country.tags.contains('bill_wm_anyway') ) {
+        apps.find { it.tags.contains('bill_wm_anyway') }.suppressed = false
+    }
+
+COMMENCE SQUIRREL MIXING....
+
+POST SQUIRREL PARAMETERS
+{
+    "show_plan_selection_screen": false,
+    "show_app_confirmation_screens": [
+        "com.clover.whatever.wirelessManager.areYouSure"
+    ],
+    "available_plans": [
+        "R9HQKT7HRB3Y2",
+        "TV771VD339C1C"
+    ],
+    "billable_devices": [
+        "C010UQ72930043",
+        "C030UQ71050253"
+    ],
+    "installed_apps": [
+        "JBCS0CPRQW9WM",
+        "X1QY38CCAQY8E",
+        "2GYRXXRZDQFNT"
+    ],
+    "country": "US",
+    "reseller": "TY4PVSPS6YBW2"
+}
